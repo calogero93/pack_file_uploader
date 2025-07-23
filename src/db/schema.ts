@@ -11,7 +11,7 @@ export type file = {
     title: string;
     description: string;
     category: Category;
-    lanaguage: Language;
+    language: Language;
     provider: Provider;
     role: Role;
     file_reference: string;
