@@ -1,0 +1,48 @@
+generator kysely {
+  provider     = "prisma-kysely"
+  output       = "../src/db"
+  fileName     = "schema.ts"
+  enumFileName = "enums.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model file {
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(200)
+  description    String   @db.VarChar(1000)
+  category       Category
+  lanaguage      Language
+  provider       Provider
+  role           Role
+  file_reference String
+}
+
+enum Category {
+  ProjectManagemt
+  Leadership
+  Negotiation
+  SoftwareDevelopment
+  ProblemSolving
+}
+
+enum Language {
+  Italian
+  English
+  Spanish
+  Chinese
+}
+
+enum Provider {
+  Pack
+  Academy
+  Tutor
+}
+
+enum Role {
+  Tutor
+  Student
+}
