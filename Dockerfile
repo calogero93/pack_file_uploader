@@ -1,5 +1,7 @@
 FROM node:22-alpine
 
+RUN apk add --no-cache jq
+
 RUN npm install -g pnpm
 
 WORKDIR /app
@@ -18,4 +20,7 @@ RUN npx prisma generate
 
 EXPOSE 3000
 
-CMD ["pnpm", "run", "start"]
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["entrypoint.sh"]

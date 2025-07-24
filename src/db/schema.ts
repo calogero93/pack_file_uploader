@@ -14,6 +14,7 @@ export type file = {
     language: Language;
     provider: Provider;
     role: Role;
+    count: Generated<number>;
     file_reference: string;
 };
 export type DB = {

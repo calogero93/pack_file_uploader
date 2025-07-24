@@ -26,9 +26,9 @@ export default $config({
       },
       link: [bucket, db],
 
-      /*dev: {
-        command: "node --watch dist/src/index.js",
-      },*/
+      dev: {
+        command: "node --watch dist/index.js",
+      },
     });
   },
 });

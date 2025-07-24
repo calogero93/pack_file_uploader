@@ -12,17 +12,18 @@ datasource db {
 
 model file {
   id             Int      @id @default(autoincrement())
-  title          String   @db.VarChar(200)
+  title          String   @db.VarChar(200) @unique
   description    String   @db.VarChar(1000)
   category       Category
   language       Language
   provider       Provider
   role           Role
+  count          Int      @default(1)
   file_reference String
 }
 
 enum Category {
-  ProjectManagemt
+  ProjectManagement
   Leadership
   Negotiation
   SoftwareDevelopment

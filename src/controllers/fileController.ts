@@ -3,7 +3,16 @@ import { Category, Language, Provider, Role } from "../db/enums";
 import { AppError, ValidationError } from "../utils/customErrors";
 import { Request, Response, NextFunction } from "express";
 import { NewFile } from "../dto/file";
-import { getAllFilesService, uploadFileService } from "../services/fileService";
+import {
+  getAggregatedStatsService,
+  getAllFilesService,
+  getFilesByKeyService,
+  uploadFileService,
+} from "../services/fileService";
+
+const fileKeySchema = z.object({
+  fileName: z.string(),
+});
 
 const fileMetadataSchema = z.object({
   title: z
@@ -54,12 +63,16 @@ export const uploadFileController = async (
       ...validatedMetadata,
       file_reference: "",
       description: validatedMetadata.description ?? "",
-      category: validatedMetadata.category ?? Category.ProjectManagemt,
+      category: validatedMetadata.category ?? Category.ProjectManagement,
       language: validatedMetadata.language ?? Language.Italian,
       provider: validatedMetadata.provider ?? Provider.Pack,
       role: validatedMetadata.role ?? Role.Tutor,
     };
-    const newFile = await uploadFileService(metadata, buffer);
+    const newFile = await uploadFileService(
+      metadata,
+      buffer,
+      file.originalname
+    );
 
     res.status(201).json({
       message: "File successfully uploaded",
@@ -78,6 +91,35 @@ export const getAllFilesController = async (
   try {
     const files = await getAllFilesService();
     return res.status(200).json(files);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getFileByKeyController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const validatedKey = fileKeySchema.parse({
+      fileName: req.query.fileName,
+    });
+    const file = await getFilesByKeyService(validatedKey.fileName);
+    return res.status(200).json(file);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAggregateStatsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const stats = await getAggregatedStatsService();
+    return res.status(200).json(stats);
   } catch (error) {
     next(error);
   }

@@ -4,7 +4,7 @@ import { Category, Language, Provider } from "../db/enums";
 const router = express.Router();
 
 const categoryLabels: Record<Category, string> = {
-  ProjectManagemt: "Project Management",
+  ProjectManagement: "Project Management",
   Leadership: "Leadership",
   Negotiation: "Negotiation",
   SoftwareDevelopment: "Software Development",

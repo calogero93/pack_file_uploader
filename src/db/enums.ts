@@ -1,5 +1,5 @@
 export const Category = {
-    ProjectManagemt: "ProjectManagemt",
+    ProjectManagement: "ProjectManagement",
     Leadership: "Leadership",
     Negotiation: "Negotiation",
     SoftwareDevelopment: "SoftwareDevelopment",
