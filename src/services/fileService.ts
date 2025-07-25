@@ -33,7 +33,7 @@ export const uploadFileService = async (
     const fileDB = await getFileByKey(fileName);
 
     const params = {
-      Bucket: Resource.MyBucket.name,
+      Bucket: Resource.PackBucket.name,
       Key: fileName,
       Body: buffer,
     };
@@ -60,7 +60,7 @@ export const uploadFileService = async (
       try {
         await s3.send(
           new DeleteObjectCommand({
-            Bucket: Resource.MyBucket.name,
+            Bucket: Resource.PackBucket.name,
             Key: file.file_reference,
           })
         );
@@ -76,7 +76,7 @@ export const uploadFileService = async (
 
 export const getAllFilesService = async () => {
   const listCommand = new ListObjectsV2Command({
-    Bucket: Resource.MyBucket.name,
+    Bucket: Resource.PackBucket.name,
   });
 
   const response = await s3.send(listCommand);
@@ -90,7 +90,7 @@ export const getAllFilesService = async () => {
 
 export const getFilesByKeyService = async (fileName: string) => {
   const getCommand = new GetObjectCommand({
-    Bucket: Resource.MyBucket.name,
+    Bucket: Resource.PackBucket.name,
     Key: fileName,
   });
 

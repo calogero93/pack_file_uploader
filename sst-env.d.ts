@@ -5,11 +5,15 @@
 
 declare module "sst" {
   export interface Resource {
-    "MyBucket": {
+    "API_KEY": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "PackBucket": {
       "name": string
       "type": "sst.aws.Bucket"
     }
-    "MyDatabase": {
+    "PackDatabase": {
       "database": string
       "host": string
       "password": string
@@ -17,12 +21,12 @@ declare module "sst" {
       "type": "sst.aws.Postgres"
       "username": string
     }
-    "MyService": {
+    "PackService": {
       "service": string
       "type": "sst.aws.Service"
       "url": string
     }
-    "MyVpc": {
+    "PackVPC": {
       "type": "sst.aws.Vpc"
     }
   }

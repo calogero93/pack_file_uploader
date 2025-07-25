@@ -15,7 +15,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: "http://MyServiceLoadBa-xhcfwnod-996486578.eu-central-1.elb.amazonaws.com",
+      url: "http://PackServiceLoad-bdrmcefe-1921833194.eu-central-1.elb.amazonaws.com",
     },
   ],
   components: {
@@ -24,6 +24,12 @@ const swaggerDefinition = {
         type: "http",
         scheme: "bearer",
         bearerFormat: "JWT",
+      },
+      apiKeyAuth: {
+        type: "apiKey",
+        in: "header",
+        name: "x-api-key",
+        description: "Chiave API per l'autenticazione delle richieste.",
       },
     },
     schemas: {
@@ -59,6 +65,11 @@ const swaggerDefinition = {
       },
     },
   },
+  security: [
+    {
+      apiKeyAuth: [],
+    },
+  ],
 };
 
 const options = {
