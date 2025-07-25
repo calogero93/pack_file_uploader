@@ -23,7 +23,7 @@ pids
 coverage
 
 # Build outputs
-dist
+./dist
 build
 out
 
