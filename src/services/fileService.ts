@@ -22,7 +22,6 @@ import {
 } from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({});
-const upload = multer({ storage: multer.memoryStorage() });
 
 export const uploadFileService = async (
   file: NewFile,
@@ -38,25 +37,29 @@ export const uploadFileService = async (
       Body: buffer,
     };
 
-    const upload = new Upload({
+    const uploadClient = new Upload({
       params,
       client: s3,
     });
 
-    const up = await upload.done();
-
-    console.log(up);
-    file.file_reference = up.Key!;
-
     if (fileDB) {
-      return await updateFileByKey(file.file_reference, fileDB.count);
+      const updatedFile = await updateFileByKey(
+        fileDB.file_reference,
+        fileDB.count
+      );
+      return updatedFile;
     }
 
-    return await uploadFile(file);
-  } catch (error) {
-    console.error("Service Error during loading file:", error);
+    const up = await uploadClient.done();
+    console.log("S3 Upload done:", up);
+    file.file_reference = up.Key!;
 
-    if (file.file_reference) {
+    const newFileRecord = await uploadFile(file);
+    return newFileRecord;
+  } catch (error: any) {
+    console.error("Service Error during loading file:", error);
+    if (file.file_reference && error.message.includes("database error")) {
+      // Refined condition
       try {
         await s3.send(
           new DeleteObjectCommand({
@@ -65,12 +68,13 @@ export const uploadFileService = async (
           })
         );
         console.log(
-          `File ${file.file_reference} removed coused by error in db`
+          `File ${file.file_reference} removed due to database error`
         );
       } catch (s3DeleteError: any) {
-        console.error("Error during remove file from S3:", s3DeleteError);
+        console.error("Error during S3 cleanup:", s3DeleteError);
       }
     }
+    throw error;
   }
 };
 
